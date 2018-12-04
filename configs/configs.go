@@ -32,14 +32,14 @@ func Defaults() *viper.Viper {
 	viperCfg.AddConfigPath("configs")
 
 	viperCfg.SetConfigType("yaml")
-	viperCfg.SetEnvPrefix("tange")
-	viperCfg.BindEnv("port")
+	//	viperCfg.SetEnvPrefix("tange")
+	//	viperCfg.BindEnv("port")
 	viperCfg.AutomaticEnv()
 
 	// Setting defaults for this application
 	viperCfg.SetDefault("version", "1.0")
 
-	viperCfg.SetDefault("port", ":61613")
+	viperCfg.SetDefault("port", "61613")
 	viperCfg.SetDefault("timeout", 5*time.Second)
 	viperCfg.SetDefault("vertex-port", 3531)
 	viperCfg.SetDefault("vertex-server", "127.0.0.1")

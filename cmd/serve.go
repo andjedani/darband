@@ -17,13 +17,19 @@ var serveCmd = &cobra.Command{
 	Short: "Serving for vertex",
 	Long:  `No longer description Needed.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		fflags := cmd.Flags()                // fflags is a *flag.FlagSet
+		if fflags.Changed("port") == false { // check if the flag "path" is set
+			port = viper.GetString("port")
+		}
 		serve(port)
 	},
 }
 
 func init() {
 	//	stats.ServiceUp()
-	serveCmd.Flags().StringVarP(&port, "port", "p", "", "port")
+	serverFlags := serveCmd.Flags()
+	serverFlags.StringVarP(&port, "port", "p", "", "port")
+	viper.BindPFlags(serverFlags)
 	rootCmd.AddCommand(serveCmd)
 }
 
@@ -35,7 +41,8 @@ func handler(RespW http.ResponseWriter, ReqR *http.Request) {
 
 func serve(port string) {
 	log.Info("I'll serve, RelX DUDE")
-	port = ":" + viper.GetString("port")
+	portString := ":" + port
+	log.Info("On port " + portString)
 	http.HandleFunc("/", handler)
-	log.Info(http.ListenAndServe(port, nil))
+	log.Info(http.ListenAndServe(portString, nil))
 }

@@ -39,6 +39,8 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.tange.yaml)")
+	viper.BindPFlag("port", rootCmd.Flags().Lookup("port"))
+	rootCmd.AddCommand(serveCmd)
 	//	rootCmd.PersistentFlags().StringVarP(&projectBase, "projectbase", "b", "", "base project directory eg. github.com/spf13/")
 	//	rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "Author name for copyright attribution")
 	//	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "Name of license for the project (can provide `licensetext` in config)")
@@ -74,8 +76,8 @@ func initConfig() {
 	}
 
 	log.SetFormatter(&log.TextFormatter{}) //&log.JSONFormatter{})
-	log_levell := viper.GetString("log-level")
-	if strings.ToUpper(log_levell) == "INFO" {
+	logLevel := viper.GetString("log-level")
+	if strings.ToUpper(logLevel) == "INFO" {
 		log.SetLevel(log.InfoLevel)
 	} else {
 		log.SetLevel(log.DebugLevel)
