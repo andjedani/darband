@@ -6,7 +6,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	//	"github.com/spf13/viper"
 )
 
 var port string
@@ -25,6 +25,7 @@ func init() {
 	//	stats.ServiceUp()
 	serveCmd.Flags().StringVarP(&port, "port", "p", "", "port")
 	rootCmd.AddCommand(serveCmd)
+
 }
 
 func handler(RespW http.ResponseWriter, ReqR *http.Request) {
@@ -35,7 +36,7 @@ func handler(RespW http.ResponseWriter, ReqR *http.Request) {
 
 func serve(port string) {
 	log.Info("I'll serve, RelX DUDE")
-	port = ":" + viper.GetString("port")
+	port = ":" + port
 	http.HandleFunc("/", handler)
 	log.Info(http.ListenAndServe(port, nil))
 }
