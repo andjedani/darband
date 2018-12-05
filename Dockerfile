@@ -1,6 +1,7 @@
-FROM grpc/go:latest
+FROM golang:stretch
 # RUN apt-get update && apt-get -y install apt-utils && apt-get install -y unzip && apt-get install wget && apt-get install -y curl 
 # RUN apt-get clean
+RUN go get -u github.com/golang/dep/cmd/dep
 
 RUN export GOBIN=$GOPATH/bin && mkdir -p $GOPATH/src/tange
 ADD . $GOPATH/src/tange

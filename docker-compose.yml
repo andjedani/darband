@@ -1,0 +1,23 @@
+version: '2'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: './Dockerfile'
+    ports:
+      - "61613:61613"
+    depends_on:
+      - postgres
+    env_file:
+      - deployment/env.list
+    links:
+      - postgres:postgres
+    volumes:
+    - .:/opt/tange
+    restart: unless-stopped
+  postgres:
+    image: postgres
+    restart: unless-stopped
+    volumes:
+      -  ./volumes/postgres/data:/var/lib/postgresql/data
+
