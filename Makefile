@@ -21,7 +21,7 @@ clean:
 	rm -f $(BINARY_NAME)
 	rm -f $(BINARY_UNIX)
 all: test build
-build: clean tange
+build: clean dependencies tange
 tange:
 	go install ./vendor/...
 	$(GOBUILD) -o $(BINARY_NAME) -v
