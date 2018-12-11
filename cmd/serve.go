@@ -7,6 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	//	"github.com/spf13/viper"
 )
 
 var port string
@@ -31,6 +32,7 @@ func init() {
 	serverFlags.StringVarP(&port, "port", "p", "", "port")
 	viper.BindPFlags(serverFlags)
 	rootCmd.AddCommand(serveCmd)
+
 }
 
 func handler(RespW http.ResponseWriter, ReqR *http.Request) {
