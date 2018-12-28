@@ -3,7 +3,9 @@ package cmd
 import (
 	"fmt"
 	"net/http"
+	"tange/common"
 
+	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -11,6 +13,7 @@ import (
 )
 
 var port string
+var db *gorm.DB
 
 // serveCmd represents the serve command
 var serveCmd = &cobra.Command{
@@ -42,6 +45,7 @@ func handler(RespW http.ResponseWriter, ReqR *http.Request) {
 }
 
 func serve(port string) {
+	db = common.Init()
 	log.Info("I'll serve, RelX DUDE")
 	portString := ":" + port
 	log.Info("On port " + portString)
