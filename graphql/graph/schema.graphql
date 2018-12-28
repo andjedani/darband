@@ -1,0 +1,24 @@
+type User {
+  id: ID!
+  username: String!
+}
+
+type Token {
+  msg: String!
+  success: Boolean!
+}
+
+type Query {
+  user: User!
+}
+
+input UserAuth {
+  username: String!
+  password: String!
+}
+
+type Mutation {
+  signIn(input: UserAuth!) : Token!
+  signUp(input: UserAuth!) : Token!
+
+}

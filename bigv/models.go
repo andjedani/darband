@@ -44,6 +44,10 @@ func FindOneUser(condition interface{}) (UserModel, error) {
 	return model, err
 }
 
+func CreateUser(username string, password string) {
+
+}
+
 func SaveOne(data interface{}) error {
 	db := common.GetDB()
 	err := db.Save(data).Error
