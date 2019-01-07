@@ -4,6 +4,8 @@ import (
 	"context"
 	"tange/bigv"
 	"tange/common"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type Resolver struct{}
@@ -18,16 +20,56 @@ func (r *Resolver) Query() QueryResolver {
 type mutationResolver struct{ *Resolver }
 
 func (r *mutationResolver) SignIn(ctx context.Context, input UserAuth) (Token, error) {
-	panic("not implemented")
-}
-func (r *mutationResolver) SignUp(ctx context.Context, input UserAuth) (Token, error) {
 	db := common.GetDB()
-	var model bigv.UserModel
-	err := db.Where(&bigv.UserModel{Username: input.Username}).First(&model).Error
-	if err != nil {
-
+	var model []bigv.UserModel
+	db.Where(&bigv.UserModel{Username: input.Username}).Find(&model)
+	if len(model) == 1 {
+		user := model[0]
+		if user.Authenticate(input.Password) == nil {
+			token := Token{
+				Msg:     "Doroste",
+				Success: true,
+			}
+			return token, nil
+		} else {
+			token := Token{
+				Msg:     "Ghalate",
+				Success: false,
+			}
+			return token, nil
+		}
 	}
-	panic("not implemented")
+	token := Token{
+		Msg:     "Nist",
+		Success: false,
+	}
+	return token, nil
+}
+
+func (r *mutationResolver) SignUp(ctx context.Context, input UserAuth) (Token, error) {
+	log.Info(input.Password)
+	db := common.GetDB()
+	var model []bigv.UserModel
+	db.Where(&bigv.UserModel{Username: input.Username}).Find(&model)
+	log.Info(input.Username)
+	if len(model) == 0 {
+		user, err := bigv.CreateUser(input.Username, input.Password)
+		if err != nil {
+			panic("panic")
+		}
+		token := Token{
+			Msg:     "shod" + user.PasswordHash,
+			Success: true,
+		}
+		return token, nil
+	} else {
+		token := Token{
+			Msg:     "nashod" + model[0].Username,
+			Success: false,
+		}
+		return token, nil
+	}
+
 }
 
 type queryResolver struct{ *Resolver }

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"tange/common"
 
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -37,6 +38,10 @@ func (u *UserModel) checkPassword(password string) error {
 	return bcrypt.CompareHashAndPassword(byteHashedPassword, bytePassword)
 }
 
+func (u *UserModel) Authenticate(password string) error {
+	return u.checkPassword(password)
+}
+
 func FindOneUser(condition interface{}) (UserModel, error) {
 	db := common.GetDB()
 	var model UserModel
@@ -44,8 +49,16 @@ func FindOneUser(condition interface{}) (UserModel, error) {
 	return model, err
 }
 
-func CreateUser(username string, password string) {
-
+func CreateUser(username string, password string) (UserModel, error) {
+	db := common.GetDB()
+	user := UserModel{
+		Username: username,
+	}
+	user.setPassword(password)
+	err := db.Save(&user).Error
+	log.Info("creating user ", username)
+	log.Info(err)
+	return user, err
 }
 
 func SaveOne(data interface{}) error {
